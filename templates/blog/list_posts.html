@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Blog posts</title>
+</head>
+<body>
+    <h1>Blog posts</h1>
+
+    {% if user.is_authenticated %}
+        <p>Hello, {{ user.username }}!</p>
+        <a href="{% url 'get_profile' %}">Profile</a>
+        <form method="post" action="{% url 'logout' %}">
+                {% csrf_token %}
+                <button type="submit">Logout</button>
+            </form>
+    {% else %}
+        <a href="{% url 'login' %}">Login</a>
+        <a href="{% url 'register' %}">Register</a>
+    {% endif %}
+
+    <a href="{% url 'create_post' %}">Create new post</a>
+    <ul>
+        {% for post in posts %}
+            <li>
+                <h2><a href="{% url 'single_post' post.id %}">{{ post.title }}</a></h2>
+                <p>By {{ post.author }} on {{ post.created_at }}</p>
+            </li>
+        {% empty %}
+            <li>No posts yet.</li>
+        {% endfor %}
+    </ul>
+</body>
+</html>

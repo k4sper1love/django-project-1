@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ post.title }}</title>
+</head>
+<body>
+    <h1>{{ post.title }}</h1>
+    <p>{{ post.content }}</p>
+    <p>By {{ post.author }} on {{ post.created_at }}</p>
+
+    <h2>Comments</h2>
+    <ul>
+        {% for comment in post.comments.all %}
+            <li>
+                <p>{{ comment.content }}</p>
+                <p>By {{ comment.author }} on {{ comment.created_at }}</p>
+            </li>
+        {% empty %}
+            <li>No comments yet.</li>
+        {% endfor %}
+    </ul>
+
+    <h3>Add a Comment</h3>
+    <form method="post" action="{% url 'create_comment' post.id %}">
+        {% csrf_token %}
+        {{ form.as_p }}
+    <button type="submit">Submit</button>
+    </form>
+
+
+    <a href="{% url 'edit_post' post.id %}">Edit Post</a>
+    <form method="post" action="{% url 'delete_post' post.id %}">
+        {% csrf_token %}
+        <button type="submit">Delete Post</button>
+    </form>
+    <a href="{% url 'list_posts' %}">Back to Posts</a>
+</body>
+</html>

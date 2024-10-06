@@ -1,0 +1,32 @@
+<h1>{{ user.username }}'s Profile</h1>
+
+{% if profile %}
+    <p><strong>Bio:</strong> {{ profile.bio }}</p>
+
+    {% if profile.profile_picture %}
+        <img src="{{ profile.profile_picture.url }}" alt="Profile Picture">
+    {% endif %}
+
+    <p><strong>Followers:</strong> {{ followers_count }}</p>
+    <p><strong>Following:</strong> {{ following_count }}</p>
+
+    {% if user != request.user %}
+        {% if is_following %}
+            <form action="{% url 'unfollow_user' user.id %}" method="POST">
+                {% csrf_token %}
+                <button type="submit">Unfollow</button>
+            </form>
+        {% else %}
+            <form action="{% url 'follow_user' user.id %}" method="POST">
+                {% csrf_token %}
+                <button type="submit">Follow</button>
+            </form>
+        {% endif %}
+    {% else %}
+        <a href="{% url 'edit_profile' %}">Edit Profile</a>
+    {% endif %}
+{% else %}
+    <p>This user has no profile.</p>
+{% endif %}
+
+<a href="{% url 'list_posts' %}">Back to Blog</a>
